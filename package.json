@@ -1,5 +1,5 @@
 {
-  "name": "playwright-testrail-reporter",
+  "name": "@bun913/playwright-testrail-reporter",
   "author": "bun913",
   "homepage": "https://github.com/bun913/playwright-testrail-reporter",
   "description": "A Playwright reporter that integrates with TestRail to report test results.",
