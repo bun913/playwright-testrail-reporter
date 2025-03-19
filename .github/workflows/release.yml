@@ -50,7 +50,7 @@ jobs:
         run: npm ci
       
       - name: build
-        run: npm bun build
+        run: npm run build
       
       - name: Publish to NPM
         run: npm publish
