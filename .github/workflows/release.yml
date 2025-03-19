@@ -1,44 +1,67 @@
-name: Publish to npm
+name: Release
 
 on:
   push:
     tags:
-      - 'v*'  # vから始まるタグ（例：v1.0.0）が作成されたときに実行
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  build-and-publish:
+  release:
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Get semantic version
+        id: semver
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v4
         with:
-          node-version: "18.x"
-          registry-url: "https://registry.npmjs.org/"
+          fetch-depth: 0
 
-      - name: Install dependencies
-        run: npm ci
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
 
-      - name: Run tests
-        run: npm test
-        
-      - name: Build package
-        run: npm run build
+      - name: Configure Git
+        run: |
+          git config user.name 'GitHub Action'
+          git config user.email 'action@github.com'
 
-      - name: Extract version from tag
-        id: extract_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: Create new branch
+        run: git checkout -b update-version-${{ steps.semver.outputs.version }}
 
-      - name: Publish package
+      - name: Update package version
+        run: npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
+
+      - name: Commit updated package version
+        run: |
+          git add package.json
+          git add package-lock.json
+          git commit -m "chore: Update package version to ${{ steps.semver.outputs.version }}"
+
+      - name: Push changes
+        run: git push origin update-version-${{ steps.semver.outputs.version }}
+
+      - name: Publish to NPM
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ steps.extract_version.outputs.VERSION }}
-          draft: false
-          prerelease: false
+          title: "Update package version to ${{ steps.semver.outputs.version }}"
+          body: "Automated PR to update package version"
+          branch: "update-version-${{ steps.semver.outputs.version }}"
+          base: "main"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.semver.outputs.version }}
+          name: Release v${{ steps.semver.outputs.version }}
+          generate_release_notes: true
