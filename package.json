@@ -4,7 +4,7 @@
   "homepage": "https://github.com/bun913/playwright-testrail-reporter",
   "description": "A Playwright reporter that integrates with TestRail to report test results.",
   "private": false,
-  "version": "0.9.0",
+  "version": "0.9.5",
   "type": "module",
   "main": "./dist/index.es.js",
   "scripts": {
