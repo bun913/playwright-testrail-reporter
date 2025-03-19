@@ -5,7 +5,7 @@ export default defineConfig({
     outDir: "dist",
     lib: {
       entry: "src/main.ts",
-      formats: ["es", "cjs"],
+      formats: ["es"],
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
