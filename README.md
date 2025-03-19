@@ -37,13 +37,22 @@ When no specific TestRun is provided, this reporter:
 |-----------|------|----------|-------------|
 | `testRailHost` | string | Yes | URL of your TestRail instance |
 | `projectId` | number | Yes | TestRail project identifier |
+| `suiteId` | number | Maybe* | TestRail suite identifier - required if your project uses multiple test suites |
 | `milestoneId` | number | No | TestRail milestone to associate with the new TestRun |
+
+*Note: `suiteId` is required when creating a new test run in TestRail projects that use multiple test suites mode. For single suite projects, this parameter may be optional.
 
 ## Implementation Details
 
 The reporter works by parsing Playwright test titles to extract TestRail case IDs. When a test completes, it sends the result to TestRail, mapping Playwright test statuses to TestRail result statuses.
 
 For tests with matching TestRail case IDs, results will be automatically reported to the specified TestRun (or to a newly created TestRun if none is specified).
+
+### Test Title Format
+
+Your test titles should include the TestRail case ID in one of these formats:
+- "C12345 Your test description"
+- "[C12345] Your test description"
 
 ## Getting Started
 
@@ -79,7 +88,8 @@ export default defineConfig({
         testRunId: 456,
         
         // OR Use Case 2: Creating a new TestRun
-        // milestoneId: 789,
+        // suiteId: 789, // Required if your project uses multiple test suites
+        // milestoneId: 101, // Optional: associate with a milestone
       }
     ]
   ],
@@ -90,5 +100,25 @@ export default defineConfig({
 
 For security reasons, it's recommended to store your TestRail API key in an environment variable:
 
+```
 # .env file
 TESTRAIL_API_KEY=your-api-key-here
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **"Field :suite_id is a required field" Error**
+   
+   When creating a new test run, you might encounter an error if your TestRail project uses multiple test suites mode but you haven't provided a `suiteId`. Add the `suiteId` parameter to your configuration to resolve this issue.
+
+2. **Warning Messages**
+
+   The reporter will output warning messages to help diagnose configuration issues:
+   
+   - "Creating a new test run without suiteId or milestone..."
+   - "Creating a new test run with suiteId but without milestone association."
+   - "Creating a new test run with milestone, but no suiteId provided..."
+   
+   These warnings indicate how the TestRail run will be created and whether required parameters might be missing.
