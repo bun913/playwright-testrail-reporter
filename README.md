@@ -59,7 +59,7 @@ Your test titles should include the TestRail case ID in one of these formats:
 ### Installation
 
 ```bash
-npm install --save-dev testrail-playwright
+npm install --save-dev playwright-testrail-reporter
 ```
 
 ### Configuration
@@ -74,7 +74,7 @@ export default defineConfig({
   reporter: [
     ['list'],
     [
-      'testrail-playwright',
+      'playwright-testrail-reporter',
       {
         // TestRail connection details
         testRailHost: 'https://example.testrail.com',
