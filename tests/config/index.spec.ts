@@ -3,7 +3,7 @@ import {
   validateOptions,
   mergeWithDefaults,
   TestRailReporterOptions,
-} from "../src/config";
+} from "../../src/config";
 
 describe("config", () => {
   describe("validateOptions", () => {
@@ -175,4 +175,4 @@ describe("config", () => {
       });
     });
   });
-});
+}); 

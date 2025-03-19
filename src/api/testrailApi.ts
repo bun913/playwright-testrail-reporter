@@ -1,6 +1,6 @@
-// src/testrailApi.ts
+// src/api/testrailApi.ts
 import axios from "axios";
-import { TestRailReporterOptions } from "./config";
+import { TestRailReporterOptions } from "../config";
 
 /**
  * TestRail API Response for Project
