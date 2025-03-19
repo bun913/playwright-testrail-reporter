@@ -7,7 +7,7 @@ export interface TestRailReporterOptions {
 
 	// Project information
 	projectId: number;
-	
+
 	// Suite information
 	suiteId?: number;
 
@@ -49,18 +49,18 @@ export function validateOptions(
 		// Creating a new test run with milestone
 		if (!options.suiteId) {
 			console.warn(
-				"Creating a new test run with milestone, but no suiteId provided. TestRail may require a suite_id depending on project settings."
+				"Creating a new test run with milestone, but no suiteId provided. TestRail may require a suite_id depending on project settings.",
 			);
 		}
 	} else {
 		// No testRunId or milestoneId
 		if (options.suiteId) {
 			console.warn(
-				"Creating a new test run with suiteId but without milestone association."
+				"Creating a new test run with suiteId but without milestone association.",
 			);
 		} else {
 			console.warn(
-				"Creating a new test run without suiteId or milestone. TestRail may require a suite_id depending on project settings."
+				"Creating a new test run without suiteId or milestone. TestRail may require a suite_id depending on project settings.",
 			);
 		}
 	}
