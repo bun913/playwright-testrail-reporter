@@ -13,5 +13,8 @@
     "@biomejs/biome": "^1.9.4",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.51.1"
   }
 }
