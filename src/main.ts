@@ -6,13 +6,14 @@
  * Configuration in your playwright.config.ts:
  *
  * ```ts
- * import { createReporter } from 'playwright-testrail-reporter';
+ * import { defineConfig } from '@playwright/test';
+ * import { PlaywrightTestRailReporter } from 'playwright-testrail-reporter';
  *
  * export default defineConfig({
  *   reporter: [
  *     ['list'],
  *     ['html'],
- *     ['playwright-testrail-reporter', {
+ *     [PlaywrightTestRailReporter, {
  *       testRailHost: 'https://example.testrail.com',
  *       username: 'user@example.com',
  *       apiKey: 'your-api-key',
@@ -35,24 +36,29 @@
 import TestRailReporter from "./reporter";
 import { TestRailReporterOptions } from "./config/index";
 import { TestStatus } from "./api/testrailApi";
+import { extractCaseId } from "./helpers/caseExtractor";
+import { mapTestStatus } from "./helpers/statusMapper";
+import { formatErrorMessage } from "./helpers/formatter";
 
 /**
- * Factory function to create a new TestRailReporter instance
- * @param options Configuration options for the reporter
- * @returns A new TestRailReporter instance
+ * Main reporter class for Playwright integration with TestRail
  */
-export function createReporter(
-	options: Partial<TestRailReporterOptions> = {},
-): TestRailReporter {
-	return new TestRailReporter(options);
+export default class PlaywrightTestRailReporter extends TestRailReporter {
+	/**
+	 * Creates a new TestRailReporter instance
+	 * @param options Configuration options for the reporter
+	 */
+	constructor(options: Partial<TestRailReporterOptions> = {}) {
+		super(options);
+	}
+
+	// Static utility methods to allow direct access to helper functions
+	static extractCaseId = extractCaseId;
+	static mapTestStatus = mapTestStatus;
+	static formatErrorMessage = formatErrorMessage;
+	static TestStatus = TestStatus;
 }
 
-// Export types and utility functions
-export { TestRailReporter };
+// Re-export important types to maintain backward compatibility
 export type { TestRailReporterOptions };
 export { TestStatus };
-
-// Export helper functions for direct use if needed
-export { extractCaseId } from "./helpers/caseExtractor";
-export { mapTestStatus } from "./helpers/statusMapper";
-export { formatErrorMessage } from "./helpers/formatter";
