@@ -66,7 +66,7 @@ describe("config", () => {
       expect(() => validateOptions(options)).not.toThrow();
     });
 
-    it("should output warning when neither testRunId nor milestoneId is provided", () => {
+    it("should output warning when neither testRunId nor milestoneId is provided and no suiteId", () => {
       const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
       const options = {
@@ -79,7 +79,47 @@ describe("config", () => {
       validateOptions(options);
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        "Neither testRunId nor milestoneId provided. A new TestRun will be created without milestone association."
+        "Creating a new test run without suiteId or milestone. TestRail may require a suite_id depending on project settings."
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it("should output warning when suiteId is provided but no testRunId or milestoneId", () => {
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+      const options = {
+        testRailHost: "https://example.testrail.com",
+        username: "user",
+        apiKey: "key",
+        projectId: 1,
+        suiteId: 5,
+      };
+
+      validateOptions(options);
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Creating a new test run with suiteId but without milestone association."
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it("should output warning when milestoneId is provided but no suiteId", () => {
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+      const options = {
+        testRailHost: "https://example.testrail.com",
+        username: "user",
+        apiKey: "key",
+        projectId: 1,
+        milestoneId: 200,
+      };
+
+      validateOptions(options);
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Creating a new test run with milestone, but no suiteId provided. TestRail may require a suite_id depending on project settings."
       );
 
       consoleSpy.mockRestore();
@@ -103,7 +143,7 @@ describe("config", () => {
       consoleSpy.mockRestore();
     });
 
-    it("should not output warning when milestoneId is provided", () => {
+    it("should not output warning when all necessary options are provided", () => {
       const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
       const options = {
@@ -111,6 +151,7 @@ describe("config", () => {
         username: "user",
         apiKey: "key",
         projectId: 1,
+        suiteId: 5,
         milestoneId: 200,
       };
 
@@ -129,6 +170,7 @@ describe("config", () => {
         username: "user",
         apiKey: "key",
         projectId: 1,
+        suiteId: 5,
         testRunId: 100,
       };
 
@@ -139,6 +181,7 @@ describe("config", () => {
         username: "user",
         apiKey: "key",
         projectId: 1,
+        suiteId: 5,
         testRunId: 100,
         milestoneId: undefined,
       });
@@ -152,6 +195,7 @@ describe("config", () => {
         username: "",
         apiKey: "",
         projectId: 0,
+        suiteId: undefined,
         testRunId: undefined,
         milestoneId: undefined,
       });
@@ -170,6 +214,7 @@ describe("config", () => {
         username: "",
         apiKey: "",
         projectId: 1,
+        suiteId: undefined,
         testRunId: undefined,
         milestoneId: undefined,
       });

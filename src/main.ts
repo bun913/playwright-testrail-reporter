@@ -18,6 +18,8 @@
  *       username: 'user@example.com',
  *       apiKey: 'your-api-key',
  *       projectId: 1,
+ *       // Required if your project uses multiple test suites and you're creating a new run
+ *       suiteId: 2,
  *       // Either provide a testRunId to use an existing run
  *       testRunId: 123,
  *       // Or provide a milestoneId to create a new run under a milestone

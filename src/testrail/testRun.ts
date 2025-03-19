@@ -43,6 +43,11 @@ export async function createNewTestRun(
 			case_ids: caseIds,
 		};
 
+		// Set suite_id if provided in options
+		if (options.suiteId) {
+			payload.suite_id = options.suiteId;
+		}
+
 		if (options.milestoneId) {
 			payload.milestone_id = options.milestoneId;
 		}

@@ -7,6 +7,9 @@ export interface TestRailReporterOptions {
 
 	// Project information
 	projectId: number;
+	
+	// Suite information
+	suiteId?: number;
 
 	// Use Case 1: Updating existing TestRun
 	testRunId?: number;
@@ -39,11 +42,27 @@ export function validateOptions(
 		throw new Error("TestRail project ID is required");
 	}
 
-	// Either use existing TestRun or create a new one
-	if (!options.testRunId && !options.milestoneId) {
-		console.warn(
-			"Neither testRunId nor milestoneId provided. A new TestRun will be created without milestone association.",
-		);
+	// Provide information about how the test run will be handled
+	if (options.testRunId) {
+		// Using existing test run, no warnings needed
+	} else if (options.milestoneId) {
+		// Creating a new test run with milestone
+		if (!options.suiteId) {
+			console.warn(
+				"Creating a new test run with milestone, but no suiteId provided. TestRail may require a suite_id depending on project settings."
+			);
+		}
+	} else {
+		// No testRunId or milestoneId
+		if (options.suiteId) {
+			console.warn(
+				"Creating a new test run with suiteId but without milestone association."
+			);
+		} else {
+			console.warn(
+				"Creating a new test run without suiteId or milestone. TestRail may require a suite_id depending on project settings."
+			);
+		}
 	}
 }
 
@@ -60,6 +79,7 @@ export function mergeWithDefaults(
 		username: options.username || "",
 		apiKey: options.apiKey || "",
 		projectId: options.projectId || 0,
+		suiteId: options.suiteId,
 		testRunId: options.testRunId,
 		milestoneId: options.milestoneId,
 	};
