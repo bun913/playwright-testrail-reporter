@@ -1,0 +1,17 @@
+{
+  "name": "testrail-playwright",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "format": "biome format --write ./src"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0"
+  }
+}
