@@ -46,6 +46,12 @@ jobs:
       - name: Push changes
         run: git push origin update-version-${{ steps.semver.outputs.version }}
 
+      - name: install
+        run: npm ci
+      
+      - name: build
+        run: npm bun build
+      
       - name: Publish to NPM
         run: npm publish
         env:
