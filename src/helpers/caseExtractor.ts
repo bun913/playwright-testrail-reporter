@@ -1,4 +1,3 @@
-
 /**
  * Extract TestRail case ID from test title.
  *
@@ -27,9 +26,7 @@ export function extractCaseId(title: string): number | null {
  * @param title The test title
  * @returns The case ID as a number, or null if not found
  */
-export function extractCaseIdFromTest(
-	title: string,
-): number | null {
+export function extractCaseIdFromTest(title: string): number | null {
 	// Extract from test title only
 	// Tests without TestRail IDs should be skipped
 	return extractCaseId(title);
