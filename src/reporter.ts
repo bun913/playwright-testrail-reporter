@@ -33,7 +33,7 @@ export default class TestRailReporter implements Reporter {
 	 * Playwright invokes this after each test completes (pass, fail, or skip)
 	 */
 	onTestEnd(test: TestCase, result: TestResult): void {
-		const caseId = extractCaseIdFromTest(test.title, test.location.file);
+		const caseId = extractCaseIdFromTest(test.title);
 		if (!caseId) return;
 
 		this.pendingCases++;
