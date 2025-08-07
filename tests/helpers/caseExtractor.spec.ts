@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { extractCaseId } from "../../src/helpers/caseExtractor";
+import { extractCaseId, extractCaseIdFromTest } from "../../src/helpers/caseExtractor";
 
 describe("caseExtractor", () => {
   describe("extractCaseId", () => {
@@ -28,6 +28,28 @@ describe("caseExtractor", () => {
 
     it("should return null for empty string", () => {
       expect(extractCaseId("")).toBeNull();
+    });
+  });
+
+  describe("extractCaseIdFromTest", () => {
+    it("should extract case ID from test title with C format", () => {
+      const result = extractCaseIdFromTest("C11111 delete a user with tenant");
+      expect(result).toBe(11111);
+    });
+
+    it("should extract case ID from test title with [C] format", () => {
+      const result = extractCaseIdFromTest("[C99999] create a user");
+      expect(result).toBe(99999);
+    });
+
+    it("should return null for test title without case ID", () => {
+      const result = extractCaseIdFromTest("create a user without special settings");
+      expect(result).toBeNull();
+    });
+
+    it("should return null for test title with case ID not at beginning", () => {
+      const result = extractCaseIdFromTest("deletes a user with tenant C12345");
+      expect(result).toBeNull();
     });
   });
 }); 
