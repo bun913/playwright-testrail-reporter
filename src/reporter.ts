@@ -4,7 +4,7 @@ import {
 	validateOptions,
 	mergeWithDefaults,
 } from "./config/index";
-import { extractCaseIdFromTest } from "./helpers/caseExtractor";
+import { extractCaseIdsFromTest } from "./helpers/caseExtractor";
 import { verifyConnection } from "./testrail/connection";
 import { createOrFindTestRun } from "./testrail/testRun";
 import {
@@ -33,11 +33,13 @@ export default class TestRailReporter implements Reporter {
 	 * Playwright invokes this after each test completes (pass, fail, or skip)
 	 */
 	onTestEnd(test: TestCase, result: TestResult): void {
-		const caseId = extractCaseIdFromTest(test.title);
-		if (!caseId) return;
+		const caseIds = extractCaseIdsFromTest(test.title);
+		if (caseIds.length === 0) return;
 
-		this.pendingCases++;
-		this.testResults.set(caseId, createTestCaseResult(caseId, result));
+		for (const caseId of caseIds) {
+			this.pendingCases++;
+			this.testResults.set(caseId, createTestCaseResult(caseId, result));
+		}
 	}
 
 	/**

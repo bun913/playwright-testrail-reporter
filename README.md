@@ -46,13 +46,20 @@ When no specific TestRun is provided, this reporter:
 
 The reporter works by parsing Playwright test titles to extract TestRail case IDs. When a test completes, it sends the result to TestRail, mapping Playwright test statuses to TestRail result statuses.
 
-For tests with matching TestRail case IDs, results will be automatically reported to the specified TestRun (or to a newly created TestRun if none is specified).
+For tests with matching TestRail case IDs, results will be automatically reported to the specified TestRun (or to a newly created TestRun if none is specified). Tests that carry multiple case IDs will update all matching cases in the same run.
 
 ### Test Title Format
 
 Your test titles should include the TestRail case ID in one of these formats:
 - "C12345 Your test description"
 - "[C12345] Your test description"
+
+Multiple case IDs are supported. Place them consecutively at the start of the title, separated by spaces:
+- "C12345 C67890 Your test description"
+- "[C12345] [C67890] Your test description"
+- "C12345 [C67890] Your test description"
+
+When multiple IDs are present, the same test result is reported to **each** case in TestRail.
 
 ## Getting Started
 
