@@ -5,6 +5,14 @@
     "access": "public"
   },
   "homepage": "https://github.com/bun913/playwright-testrail-reporter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bun913/playwright-testrail-reporter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bun913/playwright-testrail-reporter/issues"
+  },
+  "license": "MIT",
   "description": "A Playwright reporter that integrates with TestRail to report test results.",
   "private": false,
   "version": "0.10.0",
