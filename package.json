@@ -15,7 +15,7 @@
   "license": "MIT",
   "description": "A Playwright reporter that integrates with TestRail to report test results.",
   "private": false,
-  "version": "0.10.0",
+  "version": "0.11.0",
   "type": "module",
   "main": "./dist/index.es.js",
   "files": [
