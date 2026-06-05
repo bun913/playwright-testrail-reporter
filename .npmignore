@@ -1,3 +1,5 @@
+# NOTE: package.json "files" already whitelists what gets published (dist + README).
+# These entries are defense-in-depth so nothing sensitive ships even if "files" changes.
 .log
 .DS_Store
 .idea
@@ -5,6 +7,21 @@
 .git
 .gitignore
 .github
+.claude
 tests/
+e2e/
 coverage/
 node_modules
+src/
+.env
+.env.example
+.testrail-e2e.env
+.testrail-e2e.env.example
+.playwright-cli/
+test-results/
+playwright-report/
+playwright.e2e.config.ts
+vite.config.ts
+vitest.config.ts
+tsconfig.json
+biome.json

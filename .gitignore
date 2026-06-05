@@ -23,3 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 coverage/
+
+# E2E (TestRail demo) secrets & artifacts
+.env
+.testrail-e2e.env
+.playwright-cli/
+test-results/
+playwright-report/

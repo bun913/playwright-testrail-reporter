@@ -10,7 +10,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      id-token: write
+      id-token: write # Required for Takumi Guard OIDC and npm provenance
     runs-on: ubuntu-latest
     steps:
       - name: Get semantic version
@@ -20,50 +20,49 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
 
+      # Secure the npm environment BEFORE any install/audit/publish.
+      - uses: flatt-security/setup-takumi-guard-npm@v1
+        with:
+          bot-id: "BT01KPGC0DQQM4GSQJXHGAJ7C87G"
+
       - name: Configure Git
         run: |
           git config user.name 'GitHub Action'
           git config user.email 'action@github.com'
 
-      - name: Create new branch
-        run: git checkout -b update-version-${{ steps.semver.outputs.version }}
-
       - name: Update package version
         run: npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
 
-      - name: Commit updated package version
-        run: |
-          git add package.json
-          git add package-lock.json
-          git commit -m "chore: Update package version to ${{ steps.semver.outputs.version }}"
-
-      - name: Push changes
-        run: git push origin update-version-${{ steps.semver.outputs.version }}
-
       - name: install
         run: npm ci
-      
+
+      - name: Upgrade npm
+        run: npm install -g npm@latest
+
       - name: build
         run: npm run build
-      
-      - name: Publish to NPM
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public --registry https://registry.npmjs.org
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           title: "Update package version to ${{ steps.semver.outputs.version }}"
           body: "Automated PR to update package version"
           branch: "update-version-${{ steps.semver.outputs.version }}"
           base: "main"
+          commit-message: "chore: Update package version to ${{ steps.semver.outputs.version }}"
+          add-paths: |
+            package.json
+            package-lock.json
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
