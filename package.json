@@ -27,11 +27,11 @@
     "@biomejs/biome": "^1.9.4",
     "@playwright/cli": "^0.1.1",
     "@types/node": "^22.13.10",
-    "@vitest/coverage-v8": "^3.0.9",
+    "@vitest/coverage-v8": "^4.1.8",
     "dotenv": "^16.4.5",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
-    "vitest": "^3.0.9"
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "@playwright/test": "^1.51.1",
