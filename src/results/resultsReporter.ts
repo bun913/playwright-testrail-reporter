@@ -73,6 +73,9 @@ export async function reportResultsToTestRail(
 				status_id: status,
 				comment,
 				version: process.env.TEST_VERSION || process.env.CI_COMMIT_SHA || "",
+				custom_fields: {
+					environment: process.env.TEST_ENVIRONMENT || "",
+				},
 			});
 		} catch (error) {
 			failedCases.push(caseId);
